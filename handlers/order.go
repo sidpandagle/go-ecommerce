@@ -18,14 +18,14 @@ func CreateOrder(c *fiber.Ctx) error {
 
 func GetAllOrder(c *fiber.Ctx) error {
 	var orders []models.Order
-	database.DB.Find(&orders)
+	database.DB.Preload("User").Find(&orders)
 	return c.JSON(orders)
 }
 
 func GetOrder(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var order models.Order
-	result := database.DB.First(&order, id)
+	result := database.DB.Preload("User").First(&order, id)
 	if result.Error != nil {
 		return c.Status(404).JSON(fiber.Map{"error": "order not found"})
 	}

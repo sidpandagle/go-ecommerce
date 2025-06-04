@@ -7,5 +7,7 @@ type Product struct {
 	Name        string `gorm:"unique"`
 	Description string
 	Price       float64
+	Stock       int
 	CategoryID  uint
+	Category    Category
 }

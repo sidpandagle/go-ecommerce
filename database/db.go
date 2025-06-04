@@ -27,6 +27,7 @@ func MigrateModels() {
 		&models.Product{},
 		&models.Cart{},
 		&models.Order{},
+		&models.OrderItem{},
 	)
 	if err != nil {
 		log.Fatal("Failed to migrate DB:", err)

@@ -2,7 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
-type Cart struct {
+type OrderItem struct {
 	gorm.Model
 	UserID    uint
 	User      User

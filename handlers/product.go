@@ -18,14 +18,14 @@ func CreateProduct(c *fiber.Ctx) error {
 
 func GetAllProduct(c *fiber.Ctx) error {
 	var products []models.Product
-	database.DB.Find(&products)
+	database.DB.Preload("Category").Find(&products)
 	return c.JSON(products)
 }
 
 func GetProduct(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var product models.Product
-	result := database.DB.First(&product, id)
+	result := database.DB.Preload("Category").First(&product, id)
 	if result.Error != nil {
 		return c.Status(404).JSON(fiber.Map{"error": "product not found"})
 	}

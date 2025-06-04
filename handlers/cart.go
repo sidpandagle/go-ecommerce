@@ -18,14 +18,14 @@ func CreateCart(c *fiber.Ctx) error {
 
 func GetAllCart(c *fiber.Ctx) error {
 	var carts []models.Cart
-	database.DB.Find(&carts)
+	database.DB.Preload("User").Preload("Product").Preload("Product.Category").Find(&carts)
 	return c.JSON(carts)
 }
 
 func GetCart(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var cart models.Cart
-	result := database.DB.First(&cart, id)
+	result := database.DB.Preload("User").Preload("Product").Preload("Product.Category").First(&cart, id)
 	if result.Error != nil {
 		return c.Status(404).JSON(fiber.Map{"error": "cart not found"})
 	}
