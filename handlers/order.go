@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 
 	"ecommerce/database"
+	"ecommerce/dto"
 	"ecommerce/models"
 )
 
@@ -51,4 +52,34 @@ func DeleteOrder(c *fiber.Ctx) error {
 		return c.Status(404).JSON(fiber.Map{"error": "order not found"})
 	}
 	return c.SendStatus(204)
+}
+
+func PlaceOrder(c *fiber.Ctx) error {
+	orderRequest := new(dto.Order)
+	if err := c.BodyParser(orderRequest); err != nil {
+		return c.Status(400).JSON(fiber.Map{"error": err.Error()})
+	}
+	order := new(models.Order)
+	order.UserID = orderRequest.UserID
+
+	var total float64
+	for _, orderItem := range orderRequest.OrderItems {
+		var product models.Product
+		if err := database.DB.First(&product, orderItem.ProductID).Error; err != nil {
+			return c.Status(404).JSON(fiber.Map{"error": "Product not found"})
+		}
+
+		itemTotal := product.Price * float64(orderItem.Quantity)
+		total += itemTotal
+
+		order.OrderItems = append(order.OrderItems, models.OrderItem{
+			OrderID:   orderItem.OrderID,
+			UserID:    orderItem.UserID,
+			ProductID: orderItem.ProductID,
+			Quantity:  orderItem.Quantity,
+		})
+	}
+	order.Total = total
+	database.DB.Create(&order)
+	return c.JSON(order)
 }

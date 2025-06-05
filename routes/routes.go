@@ -47,6 +47,7 @@ func SetupRoutes(app *fiber.App) {
 	api.Get("/orders/:id", handlers.GetOrder)
 	api.Put("/orders/:id", handlers.UpdateOrder)
 	api.Delete("/orders/:id", handlers.DeleteOrder)
+	api.Post("/orders/place-order", handlers.PlaceOrder)
 
 	// OrderItem
 	api.Post("/order_items", handlers.CreateOrderItem)

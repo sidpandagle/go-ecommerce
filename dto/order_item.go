@@ -1,9 +1,6 @@
-package models
-
-import "gorm.io/gorm"
+package dto
 
 type OrderItem struct {
-	gorm.Model
 	OrderID   uint
 	UserID    uint
 	ProductID uint

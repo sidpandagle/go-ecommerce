@@ -1,9 +1,6 @@
-package models
-
-import "gorm.io/gorm"
+package dto
 
 type Order struct {
-	gorm.Model
 	UserID     uint
 	Total      float64
 	OrderItems []OrderItem
